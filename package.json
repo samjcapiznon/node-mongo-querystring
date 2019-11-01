@@ -1,6 +1,6 @@
 {
   "name": "mongo-querystring",
-  "version": null,
+  "version": "4.1.0-6-g413a782",
   "description": "Parse and pass URL queries to MongoDB query",
   "main": "index.js",
   "files": [
