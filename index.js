@@ -306,6 +306,10 @@ module.exports.prototype.parse = function parse(query) {
       return;
     }
 
+    if (typeof val === 'boolean') {
+      res[key] = val;
+    }
+
     // value must be a string
     if (typeof val !== 'string') {
       return;

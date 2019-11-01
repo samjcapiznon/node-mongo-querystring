@@ -536,6 +536,17 @@ describe('parse()', () => {
         });
       });
 
+      it('return boolean as boolean', () => {
+        query = mqs.parse({
+          foo: true,
+          bar: false,
+        });
+        assert.deepEqual(query, {
+          foo: true,
+          bar: false,
+        });
+      });
+
       it('return string boolean as boolean', () => {
         query = mqs.parse({
           foo: 'true',
