@@ -237,11 +237,14 @@ module.exports.prototype.parse = function parse(query) {
 
   Object.keys(query).forEach((k) => {
     let key = k;
-    const val = query[key];
+    let val = query[key];
 
     // normalize array keys
-    if (val instanceof Array) {
+    if (/\[]$/.test(key)) {
       key = key.replace(/\[]$/, '');
+      if (!(val instanceof Array)) {
+        val = [val];
+      }
     }
 
     // whitelist
