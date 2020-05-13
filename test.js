@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const MongoQS = require('./');
+const MongoQS = require('.');
 
 const querystring = require('querystring');
 const qs = require('qs'); // eslint-disable-line import/no-extraneous-dependencies
@@ -379,13 +379,13 @@ describe('parseString()', () => {
     });
   });
 
-  it('returns $exists false for "!" operator when value is ""', () => {
+  it('returns $eq null for "!" operator when value is ""', () => {
     assert.deepEqual(mqs.parseString('!'), {
-      field: '$exists',
+      field: '$eq',
       op: '!',
       org: '',
-      parsed: { $exists: false },
-      value: false,
+      parsed: { $eq: null },
+      value: null,
     });
   });
 
@@ -517,9 +517,12 @@ describe('parse()', () => {
         assert.deepEqual(mqs.parse({
           foo: {},
         }), {});
-        assert.deepEqual(mqs.parse({
-          foo: false,
-        }), {});
+
+        /* Edd: contradicting to Anchor [A]
+          assert.deepEqual(mqs.parse({
+            foo: false,
+          }), {});
+        */
       });
     });
 
@@ -536,7 +539,7 @@ describe('parse()', () => {
         });
       });
 
-      it('return boolean as boolean', () => {
+      it('return boolean as boolean', () => { /** Anchor [A] */
         query = mqs.parse({
           foo: true,
           bar: false,
@@ -640,7 +643,7 @@ describe('parse()', () => {
           navn: '!',
         }), {
           navn: {
-            $exists: false,
+            $eq: null,
           },
         });
       });
@@ -842,7 +845,7 @@ describe('parse()', () => {
 
       assert.deepEqual(mqs.parse(params), {
         foo: { $exists: true },
-        bar: { $exists: false },
+        bar: { $eq: null },
         baz: { $ne: 'foo' },
         bix: 'bez',
         'bix.bax': 'that',

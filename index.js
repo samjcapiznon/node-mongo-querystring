@@ -9,6 +9,8 @@ module.exports = function MongoQS(options) {
   this.whitelist = opts.whitelist || {};
   this.custom = opts.custom || {};
 
+  this.textSearchKey = opts.textSearchKey || 'search'
+
   // String Value Parsing
   opts.string = opts.string || {};
   this.string = opts.string || {};
@@ -164,8 +166,9 @@ module.exports.prototype.parseString = function parseString(string, array) {
       if (array) {
         ret.field = '$nin';
       } else if (org === '') {
-        ret.field = '$exists';
-        ret.value = false;
+        /** converted 'foo=!' to { $eq: null} from { $exists: false } */
+        ret.field = '$eq';
+        ret.value = null;
       } else {
         ret.field = '$ne';
       }
@@ -250,7 +253,7 @@ module.exports.prototype.parse = function parse(query) {
     // whitelist
     if (Object.keys(this.whitelist).length && !this.whitelist[key]) {
       // support for $text search, 'search' key must be whitelisted
-      if (key === 'search') {
+      if (key === this.textSearchKey) {
         res.$text = {
           $search: val
         }
