@@ -10,18 +10,27 @@ let mqs = null;
 let query = null;
 
 beforeEach(() => {
-  mqs = new MongoQS();
+  mqs = new MongoQS({
+    betweens: ['createdAt', 'updatedAt']
+  });
+
   query = {};
 });
 
 describe('parse()', () => {
-  it('discards non-string values', () => {
-    assert.deepEqual(mqs.parse({
-      foo: [],
-    }), {});
-    assert.deepEqual(mqs.parse({
-      foo: {},
-    }), {});
+  it('test', () => {
+    let filter = mqs.parse({
+      foo: 'bar',
+      createdAt: '2014-01-01|2014-02-01',
+      updatedAt: '2014-01-01|2014-02-01',
+    })
+    console.log(filter)
+    // assert.deepEqual(mqs.parse({
+    //   foo: [],
+    // }), {});
+    // assert.deepEqual(mqs.parse({
+    //   foo: {},
+    // }), {});
     // assert.deepEqual(mqs.parse({
     //   foo: false,
     // }), {});

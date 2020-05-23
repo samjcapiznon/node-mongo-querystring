@@ -9,6 +9,7 @@ module.exports = function MongoQS(options) {
   this.whitelist = opts.whitelist || {};
   this.custom = opts.custom || {};
 
+  this.betweens = opts.betweens || []
   this.textSearchKey = opts.textSearchKey || 'search'
 
   // String Value Parsing
@@ -153,6 +154,22 @@ module.exports.prototype.customBetween = field => (query, value) => {
   }
 };
 
+module.exports.prototype.towaBetween = field => (query, value) => {
+  const dates = value.split('|');
+  const afterValue = dates[0];
+  const beforeValue = dates[1];
+
+  const after = parseDate(afterValue);
+  const before = parseDate(beforeValue);
+
+  if (after.toString() !== 'Invalid Date' && before.toString() !== 'Invalid Date') {
+    query[field] = {
+      $gte: after.getTime(),
+      $lte: before.getTime() + 24 * 3600 * 1000,
+    };
+  }
+};
+
 module.exports.prototype.parseString = function parseString(string, array) {
   let op = string[0] || '';
   const eq = string[1] === '=';
@@ -265,6 +282,11 @@ module.exports.prototype.parse = function parse(query) {
     // blacklist
     if (this.blacklist[key]) {
       return;
+    }
+
+    if (this.betweens.includes(key)) {
+      this.towaBetween(key)(res, val)
+      return
     }
 
     // alias
