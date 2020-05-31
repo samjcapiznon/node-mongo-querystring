@@ -259,6 +259,13 @@ module.exports.prototype.parse = function parse(query) {
     let key = k;
     let val = query[key];
 
+    // support for $text search
+    if (key === this.textSearchKey) {
+      res.$text = {
+        $search: val
+      }
+    }
+
     // normalize array keys
     if (/\[]$/.test(key)) {
       key = key.replace(/\[]$/, '');
@@ -269,13 +276,6 @@ module.exports.prototype.parse = function parse(query) {
 
     // whitelist
     if (Object.keys(this.whitelist).length && !this.whitelist[key]) {
-      // support for $text search, 'search' key must be whitelisted
-      if (key === this.textSearchKey) {
-        res.$text = {
-          $search: val
-        }
-      }
-      
       return;
     }
 
