@@ -261,6 +261,7 @@ module.exports.prototype.parse = function parse(query) {
 
     // support for $text search
     if (key === this.textSearchKey) {
+      if (!val) return
       res.$text = {
         $search: val
       }
