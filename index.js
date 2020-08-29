@@ -9,8 +9,8 @@ module.exports = function MongoQS(options) {
   this.whitelist = opts.whitelist || {};
   this.custom = opts.custom || {};
 
-  this.betweens = opts.betweens || []
-  this.textSearchKey = opts.textSearchKey || 'search'
+  this.betweens = opts.betweens || [];
+  this.textSearchKey = opts.textSearchKey || 'search';
 
   // String Value Parsing
   opts.string = opts.string || {};
@@ -165,7 +165,7 @@ module.exports.prototype.towaBetween = field => (query, value) => {
   if (after.toString() !== 'Invalid Date' && before.toString() !== 'Invalid Date') {
     query[field] = {
       $gte: after,
-      $lt: new Date(before.getTime() + 24 * 3600 * 1000),
+      $lt: new Date(before.getTime() + (24 * 3600 * 1000)),
     };
   }
 };
@@ -261,10 +261,10 @@ module.exports.prototype.parse = function parse(query) {
 
     // support for $text search
     if (key === this.textSearchKey) {
-      if (!val) return
+      if (!val) return;
       res.$text = {
-        $search: val
-      }
+        $search: val,
+      };
     }
 
     // normalize array keys
@@ -286,8 +286,8 @@ module.exports.prototype.parse = function parse(query) {
     }
 
     if (this.betweens.includes(key)) {
-      this.towaBetween(key)(res, val)
-      return
+      this.towaBetween(key)(res, val);
+      return;
     }
 
     // alias
