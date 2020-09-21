@@ -165,7 +165,7 @@ module.exports.prototype.towaBetween = field => (query, value) => {
   if (after.toString() !== 'Invalid Date' && before.toString() !== 'Invalid Date') {
     query[field] = {
       $gte: after,
-      $lt: new Date(before.getTime() + (24 * 3600 * 1000)),
+      $lte: new Date(before.getTime() + (24 * 3600 * 1000)),
     };
   }
 };
