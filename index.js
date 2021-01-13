@@ -222,8 +222,12 @@ module.exports.prototype.parseString = function parseString(string, array) {
       if (array) {
         ret.field = '$in';
       } else if (org === '') {
-        ret.field = '$exists';
-        ret.value = true;
+        /** converted 'foo=' to { $ne: null} from { $exists: true } */
+        ret.field = '$ne';
+        ret.value = null;
+
+        // ret.field = '$exists';
+        // ret.value = true;
       } else {
         ret.field = '$eq';
       }
