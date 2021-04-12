@@ -357,7 +357,7 @@ module.exports.prototype.parse = function parse(query) {
 
     // field exists query
     if (!val) {
-      res[key] = { $exists: true };
+      res[key] = { $ne: null };
 
     // query operators
     } else if (this.ops.indexOf(val[0]) >= 0) {
